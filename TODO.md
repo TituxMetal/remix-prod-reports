@@ -24,9 +24,11 @@ No database, just harcoded data
 
 - ## Dashboard
 
+  - Dashboard index with links to reports, workers and workstations - in progress
+
   - ### Workers
 
-    - Show workers - not implemented
+    - Show workers - in progress
     - Create new worker - not implemented
     - Edit worker details - not implemented
 
