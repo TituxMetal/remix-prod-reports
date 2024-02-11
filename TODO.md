@@ -8,7 +8,7 @@ No database, just harcoded data
 
   - ~~Step 1 - personalId form~~ - Done
   - ~~Step 2 - workstation form~~ - Done
-  - Step 3 - report form - in progress
+  - ~~Step 3 - report form~~ - Done
   - Step 4 - report preview - in progress
 
 - ## Public Pages
