@@ -14,7 +14,13 @@ export const links: LinksFunction = () => {
 }
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Remix Prod Report' }, { name: 'description', content: `Report your prod.` }]
+  return [
+    { title: 'Efficient Downtime Reporting Application for Logistics: LogiProdReport' },
+    {
+      name: 'description',
+      content: `LogiProdReport is a powerful downtime reporting application designed specifically for the logistics industry. Streamline your operations with our intuitive platform, allowing employees to report downtime efficiently and accurately. With transparent validation processes and manager approvals, LogiProdReport ensures smooth workflow management, leading to optimized productivity and bonus allocation decisions.`
+    }
+  ]
 }
 
 const Document = ({ children }: { children: React.ReactNode }) => {
@@ -39,11 +45,11 @@ const Document = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   return (
     <Document>
-      <header>Header goes here</header>
+      <header>LogiProdReport</header>
       <main className='flex-1'>
         <Outlet />
       </main>
-      <footer>Footer goes here</footer>
+      <footer>LogiProdReport</footer>
     </Document>
   )
 }
