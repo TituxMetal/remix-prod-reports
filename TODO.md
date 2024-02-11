@@ -13,7 +13,7 @@ No database, just harcoded data
 
 - ## Public Pages
 
-  - Home route that redirects to /start - in progress
+  - ~~Home route that redirects to /reports/start~~ - Done
   - About page - in progress
   - Login page - not implemented
 
