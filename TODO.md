@@ -15,7 +15,7 @@ No database, just harcoded data
 
   - ~~Home route that redirects to /reports/start~~ - Done
   - About page - in progress
-  - Login page - not implemented
+  - Login page - in progress
 
 - ## User Informations
 
