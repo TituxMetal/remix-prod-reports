@@ -29,7 +29,7 @@ No database, just harcoded data
   - ### Workers
 
     - Show workers - in progress
-    - Create new worker - not implemented
+    - Create new worker - in progress
     - Edit worker details - not implemented
 
   - ### Workers Reports
