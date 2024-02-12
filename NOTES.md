@@ -82,3 +82,28 @@ Workstations Workers
 Workstations Reports
 
 - /dashboard/worstations/:workstationId/reports - show reports for a workstation
+
+# Design - Style
+
+Some simple ideas for the design of the different parts of the application, which I want to use as a
+basis for inspiration.
+
+[Dashboard - Workers List](https://tailwindui.com/components/application-ui/lists/grid-lists#component-08e8555b844010db1f30cbafc8be6222)
+
+[Dashboard - Reports List](https://tailwindui.com/components/application-ui/lists/feeds#component-81e5ec57a92ddcadaa913e7bb68336fe)
+
+[Form Layouts](https://tailwindui.com/components/application-ui/forms/form-layouts#component-dcf2bee8aa4fbef0d4623df5b9718da8)
+
+[Form - Input Groups](https://tailwindui.com/components/application-ui/forms/input-groups#component-7a5297f99a5ed22df80939dd1986de5f)
+
+[Form - Textarea](https://tailwindui.com/components/application-ui/forms/textareas#component-4dfa34096e750fe0cc9a5086286bc441)
+
+[Form - Radio Groups](https://tailwindui.com/components/application-ui/forms/radio-groups#component-f77fa2476964716cd375c934954229ae)
+
+[Form - Select Menu](https://tailwindui.com/components/application-ui/forms/select-menus#component-c549ac2695455cb78d529c3a00293fe0)
+
+[Navbar](https://tailwindui.com/components/application-ui/navigation/navbars#component-d833265bea66e95da3b499411d4d49b3)
+
+[Breadcrumb](https://tailwindui.com/components/application-ui/navigation/breadcrumbs#component-7dc6ffff20237868ddf0e7d21cf17cf1)
+
+[Multi Step Form Breadcrumb](https://tailwindui.com/components/application-ui/navigation/steps#component-ef491b1515ff05e8cc7429f37bc0fae5)
