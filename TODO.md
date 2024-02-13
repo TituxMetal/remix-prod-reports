@@ -39,8 +39,8 @@ No database, just harcoded data
 
   - ### Workstations
 
-    - Show all workstations - not implemented
-    - Create workstation - not implemented
+    - Show all workstations - in progress
+    - Create workstation - in progress
 
   - ### Workstations Workers
 
