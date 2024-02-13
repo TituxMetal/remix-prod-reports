@@ -24,7 +24,7 @@ reports
 
 ## Workstation
 
-id - name - displayName - movingAround - createdAt - updatedAt
+id - name - displayName - type - description - createdAt - updatedAt
 
 ## Report
 
