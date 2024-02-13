@@ -1,6 +1,15 @@
 import { cssBundleHref } from '@remix-run/css-bundle'
 import { type LinksFunction, type MetaFunction } from '@remix-run/node'
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import {
+  Link,
+  Links,
+  LiveReload,
+  Meta,
+  NavLink,
+  Outlet,
+  Scripts,
+  ScrollRestoration
+} from '@remix-run/react'
 
 import faviconAssetUrl from '~/assets/favicon.svg'
 import tailwindStylesheetLink from '~/styles/tailwind.css'
@@ -45,11 +54,46 @@ const Document = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   return (
     <Document>
-      <header>LogiProdReport</header>
+      <header className='bg-orange-800 px-2 py-4'>
+        <nav className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
+          <div className='flex w-auto flex-shrink-0 items-center'>
+            <Link to='/' className='text-xl font-bold'>
+              Logi Prod Report
+            </Link>
+          </div>
+          <div className='hidden sm:ml-6 sm:block'>
+            <ul className='flex space-x-4'>
+              <li>
+                <NavLink className='rounded-md px-3 py-2' to='/login'>
+                  Login
+                </NavLink>
+              </li>
+              <li>
+                <Link className='rounded-md px-3 py-2' to='/about'>
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link className='rounded-md px-3 py-2' to='/dashboard'>
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
       <main className='flex-1'>
         <Outlet />
       </main>
-      <footer>LogiProdReport</footer>
+      <footer className='bg-orange-800 px-2 py-4 text-center'>
+        <nav className='flex justify-center'>
+          <Link to='/' className='font-bold'>
+            Logi Prod Report
+          </Link>
+          <span className='mx-1'>|</span>
+          <p>Coded with love and lot of coffee by Titux Metal</p>
+        </nav>
+      </footer>
     </Document>
   )
 }
