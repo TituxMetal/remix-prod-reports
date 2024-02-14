@@ -54,7 +54,7 @@ const Document = ({ children }: { children: React.ReactNode }) => {
 const App = () => {
   return (
     <Document>
-      <header className='bg-orange-800 px-2 py-4'>
+      <header className='bg-orange-800 py-4 sm:px-6 lg:px-8'>
         <nav className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
           <div className='flex w-auto flex-shrink-0 items-center'>
             <Link to='/' className='text-xl font-bold'>
