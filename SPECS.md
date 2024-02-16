@@ -16,9 +16,17 @@ user can ONLY be created by another user that has permission to do so.
 - createdAt - DateTime - Date User was created
 - updatedAt - DateTime - Date User was updated
 
-- password - Password - User's hashed password
+- hashedPassword - Password - User's hashed password
 - roleId - Role - User's role
 - reports - Report[] - User's reports
+
+## Password
+
+- id - String - Auto-generated Unique Identifier
+- password - String - Password
+
+- createdAt - DateTime - Date Password was created
+- updatedAt - DateTime - Date Password was updated
 
 ## Role
 
