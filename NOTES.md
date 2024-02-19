@@ -107,3 +107,35 @@ basis for inspiration.
 [Breadcrumb](https://tailwindui.com/components/application-ui/navigation/breadcrumbs#component-7dc6ffff20237868ddf0e7d21cf17cf1)
 
 [Multi Step Form Breadcrumb](https://tailwindui.com/components/application-ui/navigation/steps#component-ef491b1515ff05e8cc7429f37bc0fae5)
+
+# Project Management
+
+## Conventional Commits
+
+[conventionalcommits.org](https://www.conventionalcommits.org/en/v1.0.0/)
+
+### Examples
+
+- fix: correct minor typos in code
+- feat(routes): create new user route
+- feat(models): create new user model
+- feat(schema): create new user schema
+- docs: change documentation
+- style: formatting, missing semi colons, etc; no code change
+- refactor: refactoring production code, eg. renaming a variable
+- test: adding missing tests, refactoring tests; no production code change
+- chore: updating package dependencies/tools; no production code change
+
+## Issues
+
+- Title can be a global task eg. "Create User in dashboard"
+- The body can be used to describe the Acceptance Criteria and Implementation Plan using a task
+  list.
+
+## Issue Custom Label
+
+- Bug: something isn't working
+- Feature: new feature or request
+- Documentation: improvements or additions to documentation
+- Refactor: code improvements
+- Chore: maintainance work
