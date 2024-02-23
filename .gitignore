@@ -8,3 +8,5 @@ node_modules
 
 /prisma/data.sqlite
 /prisma/data.sqlite-journal
+
+/ignored
