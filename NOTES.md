@@ -139,3 +139,23 @@ basis for inspiration.
 - Documentation: improvements or additions to documentation
 - Refactor: code improvements
 - Chore: maintainance work
+
+# Database Management
+
+## Make a sql database backup
+
+Using the `.recover` from sqlite3 cli tool, we can easily create a data.sql file with sql commands.
+
+```bash
+sqlite3 prisma/data.sqlite .recover > ./ignored/data.sql
+```
+
+## Restore the database from a sql file
+
+Using the sqlite3 cli tool, we can easily recover all the data, just ignore the parse errors from
+the cli output OR add manually ` IF NOT EXISTS` on each `CREATE TABLE` commands and remove (or
+comment) the `CREATE UNIQUE INDEX` lines.
+
+```bash
+sqlite3 prisma/data.sqlite < ./ignored/data.sql
+```
