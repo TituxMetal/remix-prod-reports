@@ -1,7 +1,7 @@
-import { getFormProps, getInputProps, useForm } from '@conform-to/react'
+import { getFormProps, getInputProps, getSelectProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { redirect, type ActionFunctionArgs } from '@remix-run/node'
-import { Form, useActionData } from '@remix-run/react'
+import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 
 import { hash, prisma } from '~/libs'
@@ -11,7 +11,8 @@ const createUserSchema = z.object({
   lastName: z.string({ required_error: 'Last name is required' }),
   personalId: z.string({ required_error: 'Personal ID is required' }),
   username: z.string({ required_error: 'Username is required' }),
-  password: z.string({ required_error: 'Password is required' })
+  password: z.string({ required_error: 'Password is required' }),
+  role: z.string({ required_error: 'Role is required' })
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -22,8 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return submission.reply()
   }
 
-  const { firstName, lastName, personalId, username, password } = submission.value
-
+  const { firstName, lastName, personalId, username, password, role } = submission.value
   const existingUser = await prisma.user.findFirst({
     where: { OR: [{ username }, { personalId }] }
   })
@@ -41,7 +41,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       lastName,
       personalId,
       username,
-      password: { create: { hash: hashedPassword } }
+      password: { create: { hash: hashedPassword } },
+      role: { connect: { id: role } }
     }
   })
 
@@ -52,8 +53,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   return redirect('/dashboard')
 }
 
+export const loader = async () => {
+  const roles = await prisma.role.findMany({
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, name: true, displayName: true }
+  })
+
+  return { roles }
+}
+
 const NewUserRoute = () => {
   const lastResult = useActionData<typeof action>()
+  const { roles } = useLoaderData<typeof loader>()
   const [form, fields] = useForm({
     lastResult,
     constraint: getZodConstraint(createUserSchema),
@@ -137,18 +148,24 @@ const NewUserRoute = () => {
           )}
         </div>
         <div className='flex flex-col gap-2'>
-          <label htmlFor='role-field'>Role</label>
+          <label htmlFor={fields.role.id}>Role</label>
           <select
-            defaultValue='worker'
-            name='role'
-            id='role-field'
+            // defaultValue='worker'
+            {...getSelectProps(fields.role)}
             className='rounded-md border border-orange-300 bg-gray-700 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
           >
-            <option value='admin'>Admin</option>
-            <option value='worker'>Worker</option>
-            <option value='team-leader'>Team Leader</option>
-            <option value='depot-manager'>Depot Manager</option>
+            <option value=''>Select a role</option>
+            {roles.map(role => (
+              <option key={role.id} value={role.id}>
+                {role.name} ({role.displayName})
+              </option>
+            ))}
           </select>
+          {fields.role.errors && (
+            <p className='text-xs text-red-300' id={fields.role.errorId}>
+              {fields.role.errors}
+            </p>
+          )}
         </div>
         <div>
           <button
