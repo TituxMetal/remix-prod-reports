@@ -1,6 +1,6 @@
 import { getFormProps, getInputProps, getSelectProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { redirect, type ActionFunctionArgs } from '@remix-run/node'
+import { redirect, type ActionFunctionArgs, type MetaFunction } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
 
@@ -60,6 +60,10 @@ export const loader = async () => {
   })
 
   return { roles }
+}
+
+export const meta: MetaFunction = () => {
+  return [{ title: 'LogiProdReport | Dashboard -> Admin -> Users -> Create User' }]
 }
 
 const NewUserRoute = () => {
