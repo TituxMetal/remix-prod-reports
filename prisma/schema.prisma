@@ -18,8 +18,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   password Password?
-  role     Role?     @relation(fields: [roleId], references: [id], onUpdate: Cascade)
-  roleId   String?
+  role     Role      @relation(fields: [roleId], references: [id], onUpdate: Cascade)
+  roleId   String
 }
 
 model Password {
