@@ -4,75 +4,16 @@ import { Link, useLoaderData } from '@remix-run/react'
 
 import { prisma } from '~/libs'
 
-// const people = [
-//   {
-//     firstName: 'Titux',
-//     lastName: 'Metal',
-//     username: 'titum',
-//     personalId: 'I140C06E',
-//     role: 'Admin'
-//   },
-//   {
-//     firstName: 'Toufik',
-//     lastName: 'Bouali',
-//     username: 'toufb',
-//     personalId: 'I140C01E',
-//     role: 'Worker'
-//   },
-//   {
-//     firstName: 'Christophe',
-//     lastName: 'Bringel',
-//     username: 'chrib',
-//     personalId: 'I140C02E',
-//     role: 'Worker'
-//   },
-//   {
-//     firstName: 'Jordan',
-//     lastName: 'Hartmann',
-//     username: 'jordh',
-//     personalId: 'I140P01E',
-//     role: 'Worker'
-//   },
-//   {
-//     firstName: 'Kiredhine',
-//     lastName: 'Benmeddi',
-//     username: 'kireb',
-//     personalId: 'I140P02E',
-//     role: 'Worker'
-//   },
-//   {
-//     firstName: 'Karim',
-//     lastName: 'Hamami',
-//     username: 'karih',
-//     personalId: 'I140L01E',
-//     role: 'Team Leader'
-//   },
-//   {
-//     firstName: 'Mohamed',
-//     lastName: 'Benali',
-//     username: 'mohab',
-//     personalId: 'I140L02E',
-//     role: 'Team Leader'
-//   },
-//   {
-//     firstName: 'Issam',
-//     lastName: 'Benzema',
-//     username: 'issab',
-//     personalId: 'I140L03E',
-//     role: 'Team Leader'
-//   },
-//   {
-//     firstName: 'Jérôme',
-//     lastName: 'Stat',
-//     username: 'jeros',
-//     personalId: 'I140M01E',
-//     role: 'Depot Manager'
-//   }
-// ]
-
 export const loader = async () => {
   const users = await prisma.user.findMany({
-    select: { id: true, username: true, firstName: true, lastName: true, personalId: true }
+    select: {
+      id: true,
+      username: true,
+      firstName: true,
+      lastName: true,
+      personalId: true,
+      role: { select: { name: true } }
+    }
   })
 
   return { users }
@@ -124,8 +65,8 @@ const UsersIndexRoute = () => {
                   </dd>
                   <dt className='sr-only'>Role</dt>
                   <dd className='text-sm text-gray-200'>
-                    <span className='inline-flex flex-shrink-0 items-center rounded-xl border-transparent bg-indigo-300 px-4 py-2 text-xs font-medium text-indigo-950'>
-                      Worker
+                    <span className='inline-flex flex-shrink-0 items-center rounded-xl border-transparent bg-indigo-300 px-4 py-2 text-indigo-950'>
+                      {user.role.name}
                     </span>
                   </dd>
                 </dl>
