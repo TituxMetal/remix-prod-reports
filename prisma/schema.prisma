@@ -20,6 +20,7 @@ model User {
   password Password?
   role     Role      @relation(fields: [roleId], references: [id], onUpdate: Cascade)
   roleId   String
+  reports  Report[]
 }
 
 model Password {
@@ -38,6 +39,26 @@ model Workstation {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  reports   Report[]
+}
+
+model Report {
+  id                String   @id @default(cuid())
+  startDate         DateTime
+  endDate           DateTime
+  reasonForDowntime String
+  storageLocation   String?
+  duration          Int      @default(3)
+  details           String?
+  status            String   @default("Pending")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  workstation   Workstation @relation(fields: [workstationId], references: [id], onUpdate: Cascade)
+  workstationId String
+  owner         User        @relation(fields: [ownerId], references: [id], onUpdate: Cascade)
+  ownerId       String
 }
 
 model Role {
