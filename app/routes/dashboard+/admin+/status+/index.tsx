@@ -13,7 +13,7 @@ export const loader = async () => {
 }
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'LogiProdReport | Admin -> Report Status' }]
+  return [{ title: 'LogiProdReport | Dashboard -> Admin -> Report Status' }]
 }
 
 const ReportStatusIndexRoute = () => {
@@ -21,7 +21,7 @@ const ReportStatusIndexRoute = () => {
 
   return (
     <div className='mt-6 px-4'>
-      <h2 className='mb-6 text-center text-2xl font-bold text-orange-300'>Report Status</h2>
+      <h1 className='mb-6 text-center text-2xl font-bold text-orange-300'>Report Status</h1>
       <ul className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         <li className='rounded-t-lg bg-orange-800 hover:bg-orange-900'>
           <Link to='new' className='flex flex-1 flex-col p-8 sm:p-2'>
