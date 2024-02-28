@@ -37,7 +37,7 @@ const ReportsIndexRoute = () => {
 
   return (
     <div className='relative mt-6 px-4'>
-      <h2 className='-mb-8 py-6 text-center text-2xl font-bold text-orange-300'>Last 50 Reports</h2>
+      <h1 className='-mb-8 py-6 text-center text-2xl font-bold text-orange-300'>Last 50 Reports</h1>
       <div className='relative -top-10 flex justify-end'>
         <Link
           to='new'
