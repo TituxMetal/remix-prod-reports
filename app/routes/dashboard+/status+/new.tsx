@@ -46,7 +46,7 @@ export const meta: MetaFunction = () => {
   return [{ title: 'LogiProdReport | Dashboard -> Admin -> Report Status -> Create Report Status' }]
 }
 
-const NewRoleRoute = () => {
+const NewReportStatusRoute = () => {
   const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
     lastResult,
@@ -117,4 +117,4 @@ const NewRoleRoute = () => {
   )
 }
 
-export default NewRoleRoute
+export default NewReportStatusRoute
