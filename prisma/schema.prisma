@@ -50,15 +50,27 @@ model Report {
   storageLocation   String?
   duration          Int      @default(3)
   details           String?
-  status            String   @default("Pending")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  workstation   Workstation @relation(fields: [workstationId], references: [id], onUpdate: Cascade)
+  workstation   Workstation  @relation(fields: [workstationId], references: [id], onUpdate: Cascade)
   workstationId String
-  owner         User        @relation(fields: [ownerId], references: [id], onUpdate: Cascade)
+  owner         User         @relation(fields: [ownerId], references: [id], onUpdate: Cascade)
   ownerId       String
+  status        ReportStatus @relation(fields: [statusName], references: [name], onUpdate: Cascade)
+  statusName    String       @default("Pending")
+}
+
+model ReportStatus {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  displayName String  @unique
+  description String? @default("")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reports   Report[]
 }
 
 model Role {
