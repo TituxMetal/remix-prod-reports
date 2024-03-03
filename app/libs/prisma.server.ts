@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-import { singleton } from '~/utils'
+import { singleton } from '~/utils/singleton.server'
 
 const prisma = singleton('prisma', () => {
   const logThreshold = 0
