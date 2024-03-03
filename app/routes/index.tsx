@@ -16,8 +16,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const commitSession = await authSessionStorage.commitSession(authSession)
 
-  console.log('authSession after setting:', authSession.data)
-
   return json({}, { headers: { 'Set-Cookie': commitSession } })
 }
 
