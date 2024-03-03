@@ -1,4 +1,25 @@
+import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link } from '@remix-run/react'
+
+import { STEP_ONE_INTENT } from '~/constants'
+import { authSessionStorage, isStaffUser } from '~/utils'
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const authSession = await authSessionStorage.getSession(request.headers.get('Cookie'))
+  const staffUser = await isStaffUser(authSession)
+
+  if (staffUser) {
+    throw redirect('/dashboard')
+  }
+
+  authSession.set('intent', STEP_ONE_INTENT)
+
+  const commitSession = await authSessionStorage.commitSession(authSession)
+
+  console.log('authSession after setting:', authSession.data)
+
+  return json({}, { headers: { 'Set-Cookie': commitSession } })
+}
 
 const HomeRoute = () => {
   return (
