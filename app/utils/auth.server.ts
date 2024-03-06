@@ -2,7 +2,7 @@ import { type User } from '@prisma/client'
 import { type Session, type SessionData } from '@remix-run/node'
 
 import { WORKER_ROLE } from '~/constants'
-import { prisma } from '~/libs'
+import { prisma, verify } from '~/libs'
 
 interface ValidateUserArgs {
   key: keyof User
@@ -63,4 +63,38 @@ export const isStaffUser = async (authSession: Session<SessionData, SessionData>
   const validUser = await validateUserInSession({ key: 'id', sessionValue, role })
 
   return !!validUser && role !== WORKER_ROLE
+}
+
+/**
+ * Verifies the user's identifier and password.
+ * @param identifier - The user's identifier (username or personal ID).
+ * @param password - The user's password.
+ * @returns The user object without the password if the verification is successful, otherwise null.
+ */
+export const verifyUser = async (identifier: string, password: string) => {
+  const userWithPassword = await prisma.user.findFirst({
+    select: {
+      id: true,
+      username: true,
+      personalId: true,
+      password: { select: { hash: true } },
+      role: { select: { name: true } }
+    },
+    where: { OR: [{ username: identifier }, { personalId: identifier }] }
+  })
+
+  if (!userWithPassword || !userWithPassword.password) {
+    return null
+  }
+
+  const { hash } = userWithPassword.password
+  const isValidUser = await verify(hash, password)
+
+  if (!isValidUser) {
+    return null
+  }
+
+  const { password: _password, ...userWithoutPassword } = userWithPassword
+
+  return userWithoutPassword
 }
