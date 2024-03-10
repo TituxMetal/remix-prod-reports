@@ -16,6 +16,7 @@ import { prisma } from '~/libs'
 import {
   authSessionStorage,
   getAuthSessionInfo,
+  getSessionExpirationDate,
   getUserIdByPersonalId,
   isStaffUser,
   validateUserInSession
@@ -98,8 +99,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   authSession.set('intent', STEP_FOUR_INTENT)
 
+  const commitSession = await authSessionStorage.commitSession(authSession, {
+    expires: getSessionExpirationDate(true)
+  })
+
   return redirect(nextStepUrl, {
-    headers: { 'Set-Cookie': await authSessionStorage.commitSession(authSession) }
+    headers: { 'Set-Cookie': commitSession }
   })
 }
 

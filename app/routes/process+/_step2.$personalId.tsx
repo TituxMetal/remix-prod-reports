@@ -11,7 +11,13 @@ import { z } from 'zod'
 
 import { STEP_THREE_INTENT, STEP_TWO_INTENT, WORKER_ROLE } from '~/constants'
 import { prisma } from '~/libs'
-import { authSessionStorage, getAuthSessionInfo, isStaffUser, validateUserInSession } from '~/utils'
+import {
+  authSessionStorage,
+  getAuthSessionInfo,
+  getSessionExpirationDate,
+  isStaffUser,
+  validateUserInSession
+} from '~/utils'
 
 const workstationIdSchema = z.object({
   workstationId: z.string({ required_error: 'Workstation Id is required' })
@@ -50,8 +56,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   authSession.set('intent', STEP_THREE_INTENT)
   authSession.set('personalId', validPersonalId.personalId)
 
+  const commitSession = await authSessionStorage.commitSession(authSession, {
+    expires: getSessionExpirationDate(true)
+  })
+
   throw redirect(`/process/${personalId}/${workstationId}`, {
-    headers: { 'Set-Cookie': await authSessionStorage.commitSession(authSession) }
+    headers: { 'Set-Cookie': commitSession }
   })
 }
 
