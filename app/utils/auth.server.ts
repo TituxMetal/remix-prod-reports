@@ -1,8 +1,10 @@
 import { type User } from '@prisma/client'
-import { type Session, type SessionData } from '@remix-run/node'
+import { redirect, type Session, type SessionData } from '@remix-run/node'
 
-import { WORKER_ROLE } from '~/constants'
+import { StaffRoles } from '~/constants'
 import { prisma, verify } from '~/libs'
+
+import { authSessionStorage, getCookieSession } from './session.server'
 
 interface ValidateUserArgs {
   key: keyof User
@@ -13,7 +15,7 @@ interface ValidateUserArgs {
 /**
  * Retrieves a user based on the provided key, session value, and role.
  * @param {ValidateUserArgs} args - The arguments for validating the user.
- * @returns {Promise<User | null>} - A promise that resolves to the user if found, otherwise null.
+ * @returns - A promise that resolves to the user if found, otherwise null.
  */
 export const validateUserInSession = async ({ key, sessionValue, role }: ValidateUserArgs) => {
   const user = (await prisma.user.findFirst({
@@ -62,16 +64,49 @@ export const isStaffUser = async (authSession: Session<SessionData, SessionData>
   const { sessionUserId: sessionValue, sessionRole: role } = getAuthSessionInfo(authSession)
   const validUser = await validateUserInSession({ key: 'id', sessionValue, role })
 
-  return !!validUser && role !== WORKER_ROLE
+  return !!validUser && (Object.values(StaffRoles) as string[]).includes(role)
 }
 
 /**
- * Verifies the user's identifier and password.
- * @param identifier - The user's identifier (username or personal ID).
- * @param password - The user's password.
- * @returns The user object without the password if the verification is successful, otherwise null.
+ * Requires the user to be a staff user.
+ * If the user is not a staff user, it throws a redirect to the login page.
+ * @param request - The request object.
+ * @throws {Redirect} - If the user is not a staff user, it throws a redirect to the login page.
  */
-export const verifyUser = async (identifier: string, password: string) => {
+export const requireStaffUser = async (request: Request) => {
+  const cookieSession = await getCookieSession(request)
+  const staffUser = await isStaffUser(cookieSession)
+
+  if (!staffUser) {
+    throw redirect('/login')
+  }
+}
+
+/**
+ * Requires the user to be an admin.
+ *
+ * @param request - The request object.
+ * @returns A Promise that resolves to the valid user if the user is an admin.
+ * @throws {Redirect} If the user is not a valid admin, it throws a redirect to the login page.
+ */
+export const requireAdminUser = async (request: Request) => {
+  const authSession = await getCookieSession(request)
+  const { sessionUserId: sessionValue, sessionRole: role } = getAuthSessionInfo(authSession)
+  const validUser = await validateUserInSession({ key: 'id', sessionValue, role })
+
+  if (!validUser || role !== 'Admin') {
+    throw redirect('/login')
+  }
+
+  return validUser
+}
+
+/**
+ * Retrieves the user's information based on the identifier.
+ * @param identifier - The user's identifier (e.g., username or personalId).
+ * @returns The user object with the password hash if found, otherwise null.
+ */
+export const getUserByIdentifier = async (identifier: string) => {
   const userWithPassword = await prisma.user.findFirst({
     select: {
       id: true,
@@ -83,12 +118,37 @@ export const verifyUser = async (identifier: string, password: string) => {
     where: { OR: [{ username: identifier }, { personalId: identifier }] }
   })
 
-  if (!userWithPassword || !userWithPassword.password) {
+  return userWithPassword
+}
+
+/**
+ * Verifies the user's password.
+ * @param hash - The password hash.
+ * @param password - The user's password.
+ * @returns A promise that resolves to a boolean indicating whether the password is valid or not.
+ */
+const verifyPassword = async (hash: string, password: string) => {
+  const validPassword = await verify(hash, password)
+
+  return validPassword
+}
+
+/**
+ * Authenticates a user by their identifier and password.
+ * @param identifier - The user's identifier (e.g., username or personalId).
+ * @param password - The user's password.
+ * @returns The user object without the password if authentication is successful, otherwise null.
+ */
+export const login = async (identifier: string, password: string) => {
+  const userWithPassword = await getUserByIdentifier(identifier)
+
+  if (!userWithPassword?.password) {
     return null
   }
 
   const { hash } = userWithPassword.password
-  const isValidUser = await verify(hash, password)
+
+  const isValidUser = await verifyPassword(hash, password)
 
   if (!isValidUser) {
     return null
@@ -97,4 +157,18 @@ export const verifyUser = async (identifier: string, password: string) => {
   const { password: _password, ...userWithoutPassword } = userWithPassword
 
   return userWithoutPassword
+}
+
+/**
+ * Logs out the user by destroying the session and redirecting to the login page.
+ * @param request - The request object.
+ * @returns A redirect response to the login page.
+ */
+export const logout = async (request: Request) => {
+  const authSession = await getCookieSession(request)
+  const destroySession = await authSessionStorage.destroySession(authSession)
+
+  return redirect('/login', {
+    headers: { 'Set-Cookie': destroySession }
+  })
 }
