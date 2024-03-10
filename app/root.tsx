@@ -1,6 +1,12 @@
 import { cssBundleHref } from '@remix-run/css-bundle'
-import { type LinksFunction, type MetaFunction } from '@remix-run/node'
 import {
+  json,
+  type LinksFunction,
+  type LoaderFunctionArgs,
+  type MetaFunction
+} from '@remix-run/node'
+import {
+  Form,
   Link,
   Links,
   LiveReload,
@@ -14,12 +20,27 @@ import {
 import faviconAssetUrl from '~/assets/favicon.svg'
 import tailwindStylesheetLink from '~/styles/tailwind.css'
 
+import { StaffRoles, WORKER_ROLE } from './constants'
+import { prisma } from './libs'
+import { authSessionStorage, useOptionalUser } from './utils'
+
 export const links: LinksFunction = () => {
   return [
     { rel: 'icon', type: 'image/svg+xml', href: faviconAssetUrl },
     { rel: 'stylesheet', href: tailwindStylesheetLink },
     ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : [])
   ]
+}
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const authSession = await authSessionStorage.getSession(request.headers.get('Cookie'))
+  const userId = (authSession.get('userId') as string) ?? ''
+  const user = await prisma.user.findUnique({
+    select: { id: true, username: true, role: { select: { name: true } } },
+    where: { id: userId }
+  })
+
+  return json({ user })
 }
 
 export const meta: MetaFunction = () => {
@@ -52,6 +73,11 @@ const Document = ({ children }: { children: React.ReactNode }) => {
 }
 
 const App = () => {
+  const user = useOptionalUser()
+  const role = user?.role.name ?? ''
+  const isWorker = role === WORKER_ROLE
+  const isStaff = (Object.values(StaffRoles) as string[]).includes(role)
+
   return (
     <Document>
       <header className='bg-orange-800 py-4 sm:px-6 lg:px-8'>
@@ -62,22 +88,43 @@ const App = () => {
             </Link>
           </div>
           <div className='hidden sm:ml-6 sm:block'>
-            <ul className='flex space-x-4'>
+            <ul className='flex items-center space-x-4'>
               <li>
-                <NavLink className='rounded-md px-3 py-2' to='/login'>
-                  Login
-                </NavLink>
-              </li>
-              <li>
-                <Link className='rounded-md px-3 py-2' to='/about'>
+                <Link className='px-3 py-2' to='/about'>
                   About
                 </Link>
               </li>
-              <li>
-                <Link className='rounded-md px-3 py-2' to='/dashboard'>
-                  Dashboard
-                </Link>
-              </li>
+              {user ? (
+                <>
+                  {isStaff && (
+                    <li>
+                      <Link className='px-3 py-2' to='/dashboard'>
+                        Dashboard
+                      </Link>
+                    </li>
+                  )}
+                  {isWorker && (
+                    <li>
+                      <Link className='px-3 py-2' to='/profile'>
+                        Profile
+                      </Link>
+                    </li>
+                  )}
+                  <li>
+                    <Form action='/logout' method='POST'>
+                      <button type='submit' className='px-3 py-2'>
+                        Logout
+                      </button>
+                    </Form>
+                  </li>
+                </>
+              ) : (
+                <li>
+                  <NavLink className='px-3 py-2' to='/login'>
+                    Login
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
