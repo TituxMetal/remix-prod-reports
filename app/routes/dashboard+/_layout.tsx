@@ -1,6 +1,17 @@
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, Outlet, useLocation } from '@remix-run/react'
 
+import { requireStaffUser, useUser } from '~/utils'
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await requireStaffUser(request)
+
+  return json({})
+}
+
 const DashboardLayout = () => {
+  const { role } = useUser()
+  const isAdminUser = role.name === 'Admin'
   const location = useLocation()
   const isAdminPage = location.pathname.includes('admin')
 
@@ -20,8 +31,8 @@ const DashboardLayout = () => {
       <main className='-mt-16'>
         <div className='mx-auto max-w-screen-2xl px-4 pb-12 sm:px-6 lg:px-8'>
           <div className='rounded-lg bg-gray-800 px-5 pb-6 sm:px-6'>
-            <ul className='flex w-full justify-between'>
-              {isAdminPage ? (
+            <ul className='flex w-full justify-center gap-2'>
+              {isAdminUser ? (
                 <>
                   <li className='mx-1'>
                     <Link
