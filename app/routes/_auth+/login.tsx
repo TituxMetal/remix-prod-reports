@@ -10,13 +10,14 @@ import { Form, useActionData } from '@remix-run/react'
 import { z } from 'zod'
 
 import { WORKER_ROLE } from '~/constants'
-import { authSessionStorage } from '~/utils'
 import {
+  authSessionStorage,
   getAuthSessionInfo,
+  getSessionExpirationDate,
   isStaffUser,
-  validateUserInSession,
-  verifyUser
-} from '~/utils/auth.server'
+  login,
+  validateUserInSession
+} from '~/utils'
 
 const loginSchema = z.object({
   identifier: z
@@ -35,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const { identifier, password } = submission.value
-  const user = await verifyUser(identifier, password)
+  const user = await login(identifier, password)
 
   if (!user) {
     return submission.reply({ hideFields: ['password'], formErrors: ['Invalid credentials'] })
@@ -48,7 +49,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   authSession.set('personalId', personalId)
   authSession.set('role', role.name)
 
-  const commitSession = await authSessionStorage.commitSession(authSession)
+  const commitSession = await authSessionStorage.commitSession(authSession, {
+    expires: getSessionExpirationDate()
+  })
 
   if (role.name === WORKER_ROLE) {
     throw redirect('/profile', { headers: { 'Set-Cookie': commitSession } })
