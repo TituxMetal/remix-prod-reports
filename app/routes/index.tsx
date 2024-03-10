@@ -2,7 +2,7 @@ import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 
 import { STEP_ONE_INTENT } from '~/constants'
-import { authSessionStorage, isStaffUser } from '~/utils'
+import { authSessionStorage, getSessionExpirationDate, isStaffUser } from '~/utils'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const authSession = await authSessionStorage.getSession(request.headers.get('Cookie'))
@@ -14,7 +14,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   authSession.set('intent', STEP_ONE_INTENT)
 
-  const commitSession = await authSessionStorage.commitSession(authSession)
+  const commitSession = await authSessionStorage.commitSession(authSession, {
+    expires: getSessionExpirationDate(true)
+  })
 
   return json({}, { headers: { 'Set-Cookie': commitSession } })
 }

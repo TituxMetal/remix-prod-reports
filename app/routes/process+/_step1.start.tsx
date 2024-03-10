@@ -10,7 +10,13 @@ import { Form, useActionData } from '@remix-run/react'
 import { z } from 'zod'
 
 import { STEP_ONE_INTENT, STEP_TWO_INTENT, WORKER_ROLE } from '~/constants'
-import { authSessionStorage, getAuthSessionInfo, isStaffUser, validateUserInSession } from '~/utils'
+import {
+  authSessionStorage,
+  getAuthSessionInfo,
+  getSessionExpirationDate,
+  isStaffUser,
+  validateUserInSession
+} from '~/utils'
 
 const personalIdSchema = z.object({
   personalId: z
@@ -42,8 +48,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   authSession.set('intent', STEP_TWO_INTENT)
   authSession.set('personalId', validPersonalId.personalId)
 
+  const commitSession = await authSessionStorage.commitSession(authSession, {
+    expires: getSessionExpirationDate(true)
+  })
+
   throw redirect(`/process/${personalId}`, {
-    headers: { 'Set-Cookie': await authSessionStorage.commitSession(authSession) }
+    headers: { 'Set-Cookie': commitSession }
   })
 }
 
@@ -61,8 +71,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     authSession.set('intent', STEP_TWO_INTENT)
     authSession.set('personalId', validPersonalId.personalId)
 
+    const commitSession = await authSessionStorage.commitSession(authSession, {
+      expires: getSessionExpirationDate(true)
+    })
+
     throw redirect(`/process/${validPersonalId.personalId}`, {
-      headers: { 'Set-Cookie': await authSessionStorage.commitSession(authSession) }
+      headers: { 'Set-Cookie': commitSession }
     })
   }
 
