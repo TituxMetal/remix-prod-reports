@@ -1,5 +1,16 @@
 import { format } from 'date-fns'
 
+interface Owner {
+  firstName: string
+  lastName: string
+  personalId: string
+}
+
+interface Workstation {
+  name: string
+  displayName: string
+}
+
 interface Report {
   id: string
   startDate: Date
@@ -9,10 +20,8 @@ interface Report {
   details: string | null
   duration: number
   statusName: string
-  workstation: {
-    name: string
-    displayName: string
-  }
+  workstation?: Workstation
+  owner?: Owner
 }
 
 interface GroupedReports {
