@@ -111,7 +111,7 @@ const DashboardReportListByWorkerRoute = () => {
                           {report.statusName}
                         </p>
                         <div className='py-0.5 text-xs leading-5'>
-                          {report.workstation.displayName}
+                          {report.workstation?.displayName}
                         </div>
                       </div>
                       <div className='p-3 pb-2'>
