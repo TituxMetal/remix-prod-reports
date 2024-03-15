@@ -48,11 +48,19 @@ const DashboardLayout = () => {
                   Workers
                 </Link>
               </li>
+              <li className='mx-1'>
+                <Link
+                  className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                  to='workstations'
+                >
+                  Workstations
+                </Link>
+              </li>
               {isAdminUser && (
                 <>
                   <li className='mx-1'>
                     <Link
-                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-sky-700 px-3 py-1.5 font-semibold text-sky-200 hover:bg-sky-900 hover:text-sky-100'
                       to='admin/roles'
                     >
                       Roles
@@ -60,7 +68,7 @@ const DashboardLayout = () => {
                   </li>
                   <li className='mx-1'>
                     <Link
-                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-sky-700 px-3 py-1.5 font-semibold text-sky-200 hover:bg-sky-900 hover:text-sky-100'
                       to='admin/users'
                     >
                       Users
@@ -68,7 +76,7 @@ const DashboardLayout = () => {
                   </li>
                   <li className='mx-1'>
                     <Link
-                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-sky-700 px-3 py-1.5 font-semibold text-sky-200 hover:bg-sky-900 hover:text-sky-100'
                       to='admin/workstations'
                     >
                       Workstations
@@ -76,7 +84,7 @@ const DashboardLayout = () => {
                   </li>
                   <li className='mx-1'>
                     <Link
-                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-sky-700 px-3 py-1.5 font-semibold text-sky-200 hover:bg-sky-900 hover:text-sky-100'
                       to='admin/status'
                     >
                       Report Status
@@ -84,7 +92,7 @@ const DashboardLayout = () => {
                   </li>
                   <li className='mx-1'>
                     <Link
-                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                      className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-sky-700 px-3 py-1.5 font-semibold text-sky-200 hover:bg-sky-900 hover:text-sky-100'
                       to='admin/reports'
                     >
                       Reports
