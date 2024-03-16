@@ -119,7 +119,7 @@ const NewReportPage = () => {
           </p>
         )}
         <div className='flex flex-col gap-2'>
-          <label htmlFor='dateOfDay-field'>Date of Day</label>
+          <label htmlFor={fields.dateOfDay.id}>Date of Day</label>
           <input
             className='rounded-md border border-orange-300 bg-gray-700 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             {...getInputProps(fields.dateOfDay, { type: 'date' })}
@@ -132,7 +132,7 @@ const NewReportPage = () => {
           )}
         </div>
         <div className='flex flex-col gap-2'>
-          <label htmlFor='hourOfDay-field'>Hour of Day</label>
+          <label htmlFor={fields.hourOfDay.id}>Hour of Day</label>
           <input
             className='rounded-md border border-orange-300 bg-gray-700 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             {...getInputProps(fields.hourOfDay, { type: 'time' })}
@@ -216,7 +216,7 @@ const NewReportPage = () => {
           )}
         </div>
         <div className='flex flex-col gap-2'>
-          <label htmlFor={fields.workstationId.id}>Worker</label>
+          <label htmlFor={fields.workstationId.id}>Workstation</label>
           <select
             name={fields.workstationId.name}
             id={fields.workstationId.id}
