@@ -103,7 +103,7 @@ const DashboardReportListByWorkerRoute = () => {
                       <div className='flex items-center justify-between gap-x-4 p-3 pb-2'>
                         <p className='py-0.5 text-xs leading-5'>
                           {'From '}
-                          <time dateTime={report.startTime}>{report.endTime}</time>
+                          <time dateTime={report.startTime}>{report.startTime}</time>
                           {' to '}
                           <time dateTime={report.endTime}>{report.endTime}</time>
                         </p>
