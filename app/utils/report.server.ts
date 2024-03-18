@@ -1,12 +1,14 @@
 import { format } from 'date-fns'
 
 interface Owner {
+  id: string
   firstName: string
   lastName: string
   personalId: string
 }
 
 interface Workstation {
+  id: string
   name: string
   displayName: string
 }
