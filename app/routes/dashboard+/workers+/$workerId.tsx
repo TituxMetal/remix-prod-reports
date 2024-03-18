@@ -35,7 +35,7 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
       storageLocation: true,
       details: true,
       duration: true,
-      workstation: { select: { name: true, displayName: true } },
+      workstation: { select: { id: true, name: true, displayName: true } },
       statusName: true
     },
     where: { ownerId: owner.id, startDate: { gte, lt } },
@@ -110,8 +110,13 @@ const DashboardReportListByWorkerRoute = () => {
                         <p className='rounded-lg border border-yellow-300/60 bg-yellow-900 px-2 py-1 text-xs leading-5 text-yellow-200 '>
                           {report.statusName}
                         </p>
-                        <div className='py-0.5 text-xs leading-5'>
-                          {report.workstation?.displayName}
+                        <div className='py-0.5 text-sm leading-5'>
+                          <Link
+                            to={`/dashboard/workstations/${report.workstation?.id}`}
+                            className='font-semibold text-pink-200 hover:text-pink-300'
+                          >
+                            {report.workstation?.displayName}
+                          </Link>
                         </div>
                       </div>
                       <div className='p-3 pb-2'>
