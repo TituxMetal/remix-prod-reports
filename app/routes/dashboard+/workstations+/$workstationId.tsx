@@ -5,7 +5,7 @@ import {
   PlusIcon
 } from '@heroicons/react/20/solid'
 import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData, useLocation } from '@remix-run/react'
 import { endOfDay, format, formatISO, startOfDay } from 'date-fns'
 
 import { prisma } from '~/libs'
@@ -63,6 +63,8 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 const DashboardReportListByWorkstationRoute = () => {
   const { numberOfReports, sortedReportsByDay, workstation } = useLoaderData<typeof loader>()
+  const location = useLocation()
+  const referer = encodeURIComponent(location.pathname)
 
   return (
     <div className='relative mt-6 px-4'>
@@ -138,7 +140,7 @@ const DashboardReportListByWorkstationRoute = () => {
                       </div>
                       <div className='flex justify-around p-2'>
                         <Link
-                          to='#'
+                          to={`/dashboard/reports/${report.id}?_referer=${referer}`}
                           className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-sky-300 hover:bg-orange-950/40 hover:text-sky-400 xl:text-lg'
                         >
                           <PencilSquareIcon className='mr-2 size-5' aria-hidden='true' />
