@@ -1,15 +1,62 @@
+import { parseWithZod } from '@conform-to/zod'
 import {
   ExclamationTriangleIcon,
   HandThumbUpIcon,
   PencilSquareIcon,
   PlusIcon
 } from '@heroicons/react/20/solid'
-import { type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
-import { Link, useLoaderData, useLocation } from '@remix-run/react'
+import {
+  json,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+  type MetaFunction
+} from '@remix-run/node'
+import { Link, useFetcher, useLoaderData, useLocation } from '@remix-run/react'
 import { endOfDay, format, formatISO, startOfDay } from 'date-fns'
+import { z } from 'zod'
 
 import { prisma } from '~/libs'
 import { groupReportsByDay, sortReportsByDay } from '~/utils'
+
+const updateReportStatusSchema = z.object({
+  intent: z.string(),
+  reportId: z.string()
+})
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData()
+  const submission = parseWithZod(formData, { schema: updateReportStatusSchema })
+
+  if (submission.status !== 'success') {
+    return submission.reply()
+  }
+
+  if (!submission.value) {
+    return json({ status: 'error', submission } as const, { status: 400 })
+  }
+
+  const { reportId, intent } = submission.value
+  const report = await prisma.report.findUnique({
+    where: { id: reportId },
+    select: { id: true, status: true }
+  })
+
+  if (!report) {
+    return json({ status: 'error' } as const, { status: 400 })
+  }
+
+  const intentAction = intent === 'reviewed' ? 'Reviewed' : 'Cancelled'
+  const updatedReport = await prisma.report.update({
+    where: { id: reportId },
+    data: { statusName: intentAction }
+  })
+
+  if (!updatedReport) {
+    return json({ status: 'error' } as const, { status: 400 })
+  }
+
+  return json({ status: 'success' })
+}
 
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const workstationId = params.workstationId ?? ''
@@ -63,6 +110,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 const DashboardReportListByWorkstationRoute = () => {
   const { numberOfReports, sortedReportsByDay, workstation } = useLoaderData<typeof loader>()
+  const fetcher = useFetcher<typeof action>()
   const location = useLocation()
   const referer = encodeURIComponent(location.pathname)
 
@@ -138,29 +186,36 @@ const DashboardReportListByWorkstationRoute = () => {
                           </p>
                         )}
                       </div>
-                      <div className='flex justify-around p-2'>
-                        <Link
-                          to={`/dashboard/reports/${report.id}?_referer=${referer}`}
-                          className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-sky-300 hover:bg-orange-950/40 hover:text-sky-400 xl:text-lg'
-                        >
-                          <PencilSquareIcon className='mr-2 size-5' aria-hidden='true' />
-                          Edit
-                        </Link>
-                        <Link
-                          to='#'
-                          className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-emerald-300 hover:bg-orange-950/40 hover:text-emerald-400 xl:text-lg'
-                        >
-                          <HandThumbUpIcon className='mr-2 size-5' aria-hidden='true' />
-                          Review Report
-                        </Link>
-                        <Link
-                          to='#'
-                          className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-yellow-300 hover:bg-orange-950/40 hover:text-yellow-400 xl:text-lg'
-                        >
-                          <ExclamationTriangleIcon className='mr-2 size-5' aria-hidden='true' />
-                          Cancel Report
-                        </Link>
-                      </div>
+                      <fetcher.Form method='post'>
+                        <div className='flex justify-around p-2'>
+                          <Link
+                            to={`/dashboard/reports/${report.id}?_referer=${referer}`}
+                            className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-sky-300 hover:bg-orange-950/40 hover:text-sky-400 xl:text-lg'
+                          >
+                            <PencilSquareIcon className='mr-2 size-5' aria-hidden='true' />
+                            Edit
+                          </Link>
+                          <input type='hidden' name='reportId' value={report.id} />
+                          <button
+                            type='submit'
+                            name='intent'
+                            value='reviewed'
+                            className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-emerald-300 hover:bg-orange-950/40 hover:text-emerald-400 xl:text-lg'
+                          >
+                            <HandThumbUpIcon className='mr-2 size-5' aria-hidden='true' />
+                            Review Report
+                          </button>
+                          <button
+                            type='submit'
+                            name='intent'
+                            value='cancelled'
+                            className='flex items-center rounded-lg bg-orange-900 px-4 py-2 text-base font-bold text-yellow-300 hover:bg-orange-950/40 hover:text-yellow-400 xl:text-lg'
+                          >
+                            <ExclamationTriangleIcon className='mr-2 size-5' aria-hidden='true' />
+                            Cancel Report
+                          </button>
+                        </div>
+                      </fetcher.Form>
                     </div>
                   </div>
                 </div>
