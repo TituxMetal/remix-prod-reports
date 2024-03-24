@@ -99,26 +99,46 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       from: startOfDay(subDays(todayDate, 1)),
       to: endOfDay(subDays(todayDate, 1))
     },
-    { name: 'week', displayName: 'Week', from: startOfWeek(todayDate), to: endOfWeek(todayDate) },
+    {
+      name: 'before-yesterday',
+      displayName: 'Before Yesterday',
+      from: startOfDay(subDays(todayDate, 2)),
+      to: endOfDay(subDays(todayDate, 2))
+    },
+    {
+      name: 'current-week',
+      displayName: 'Current Week',
+      from: startOfWeek(todayDate),
+      to: endOfWeek(todayDate)
+    },
     {
       name: 'last-week',
       displayName: 'Last Week',
       from: startOfWeek(subDays(todayDate, 7)),
-      to: endOfWeek(subDays(todayDate, 7))
+      to:
+        endOfWeek(subDays(todayDate, 7)) > todayDate ? todayDate : endOfWeek(subDays(todayDate, 7))
     },
     {
-      name: 'month',
-      displayName: 'Month',
+      name: 'current-month',
+      displayName: 'Current Month',
       from: startOfMonth(todayDate),
-      to: endOfMonth(todayDate)
+      to: endOfMonth(todayDate) > todayDate ? todayDate : endOfMonth(todayDate)
     },
     {
       name: 'last-month',
       displayName: 'Last Month',
       from: startOfMonth(subDays(todayDate, todayDate.getDate())),
-      to: endOfMonth(subDays(todayDate, todayDate.getDate()))
+      to:
+        endOfMonth(subDays(todayDate, todayDate.getDate())) > todayDate
+          ? todayDate
+          : endOfMonth(subDays(todayDate, todayDate.getDate()))
     },
-    { name: 'year', displayName: 'Year', from: startOfYear(todayDate), to: endOfYear(todayDate) },
+    {
+      name: 'current-year',
+      displayName: 'Current Year',
+      from: startOfYear(todayDate),
+      to: endOfYear(todayDate) > todayDate ? todayDate : endOfYear(todayDate)
+    },
     {
       name: 'last-year',
       displayName: 'Last Year',
