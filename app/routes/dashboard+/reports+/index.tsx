@@ -146,7 +146,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       to: endOfYear(subDays(todayDate, 365))
     }
   ]
-  const countFilter = ['5', '10', '25']
+  const countFilter = ['5', '10', '25', '50', '100']
 
   const { searchParams } = new URL(request.url)
 
