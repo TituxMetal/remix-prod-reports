@@ -1,12 +1,17 @@
 import { getFormProps, getInputProps, getSelectProps, useForm } from '@conform-to/react'
-import { getZodConstraint } from '@conform-to/zod'
+import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import {
   ExclamationTriangleIcon,
   HandThumbUpIcon,
   PencilSquareIcon,
   PlusIcon
 } from '@heroicons/react/20/solid'
-import { redirectDocument, type LoaderFunctionArgs } from '@remix-run/node'
+import {
+  json,
+  redirectDocument,
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs
+} from '@remix-run/node'
 import {
   Form,
   Link,
@@ -43,6 +48,46 @@ const filterReportsSchema = z.object({
   dateRangesFilter: z.string(),
   page: z.string()
 })
+
+const updateReportStatusSchema = z.object({
+  intent: z.string(),
+  reportId: z.string()
+})
+
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData()
+  const submission = parseWithZod(formData, { schema: updateReportStatusSchema })
+
+  if (submission.status !== 'success') {
+    return submission.reply()
+  }
+
+  if (!submission.value) {
+    return json({ status: 'error', submission } as const, { status: 400 })
+  }
+
+  const { reportId, intent } = submission.value
+  const report = await prisma.report.findUnique({
+    where: { id: reportId },
+    select: { id: true, status: true }
+  })
+
+  if (!report) {
+    return json({ status: 'error' } as const, { status: 400 })
+  }
+
+  const intentAction = intent === 'reviewed' ? 'Reviewed' : 'Cancelled'
+  const updatedReport = await prisma.report.update({
+    where: { id: reportId },
+    data: { statusName: intentAction }
+  })
+
+  if (!updatedReport) {
+    return json({ status: 'error' } as const, { status: 400 })
+  }
+
+  return json({ status: 'success' })
+}
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const todayDate = new Date()
