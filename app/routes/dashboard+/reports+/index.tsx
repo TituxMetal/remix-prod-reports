@@ -149,14 +149,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const countFilter = ['5', '10', '25', '50', '100']
 
   const { searchParams } = new URL(request.url)
-
-  // Extract filter values from the request parameters
   const statusParams = searchParams.get('statusFilter') ?? undefined
   const workstationsParams = searchParams.get('workstationsFilter') ?? undefined
   const workersParams = searchParams.get('workersFilter') ?? undefined
   const dateRangesParams = searchParams.get('dateRangesFilter') ?? undefined
   const countParams = searchParams.get('countFilter') ?? undefined
-  const pageParams = searchParams.get('page') ?? '1' // Default to page 1 if not provided
+  const pageParams = searchParams.get('page') ?? '1'
 
   if (
     workersParams === '' &&
@@ -168,13 +166,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   ) {
     return redirectDocument(`/dashboard/reports`)
   }
-  console.log('searchParams:', searchParams)
 
   const where = {
-    statusName: { contains: statusParams }, // Filter by status
-    workstation: { name: { contains: workstationsParams } }, // Filter by workstation
-    // Assuming workers contain unique identifiers like usernames
-    owner: { username: { contains: workersParams } } // Filter by worker
+    statusName: { contains: statusParams },
+    workstation: { name: { contains: workstationsParams } },
+    owner: { username: { contains: workersParams } }
   }
 
   const selectedDateRange = dateRangesFilter.find(range => range.name === dateRangesParams)
@@ -322,75 +318,75 @@ const ReportsListRoute = () => {
         >
           <input {...getInputProps(fields.page, { type: 'hidden' })} />
           <div className='flex flex-wrap justify-center gap-4'>
-          <div>
-            <label htmlFor={fields.statusFilter.id}>Status: </label>
-            <select
-              {...getSelectProps(fields.statusFilter)}
+            <div>
+              <label htmlFor={fields.statusFilter.id}>Status: </label>
+              <select
+                {...getSelectProps(fields.statusFilter)}
                 className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
-            >
-              <option value=''>All</option>
-              {statusFilter.map(({ name, displayName }) => (
-                <option key={name} value={name}>
-                  {displayName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor={fields.workstationsFilter.id}>Workstations: </label>
-            <select
-              {...getSelectProps(fields.workstationsFilter)}
+              >
+                <option value=''>All</option>
+                {statusFilter.map(({ name, displayName }) => (
+                  <option key={name} value={name}>
+                    {displayName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={fields.workstationsFilter.id}>Workstations: </label>
+              <select
+                {...getSelectProps(fields.workstationsFilter)}
                 className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
-            >
-              <option value=''>All</option>
-              {workstationsFilter.map(({ name, displayName }) => (
-                <option key={name} value={name}>
-                  {displayName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor={fields.workersFilter.id}>Workers: </label>
-            <select
-              {...getSelectProps(fields.workersFilter)}
+              >
+                <option value=''>All</option>
+                {workstationsFilter.map(({ name, displayName }) => (
+                  <option key={name} value={name}>
+                    {displayName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={fields.workersFilter.id}>Workers: </label>
+              <select
+                {...getSelectProps(fields.workersFilter)}
                 className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
-            >
-              <option value=''>All</option>
-              {workersFilter.map(({ username, firstName, lastName }) => (
-                <option key={username} value={username}>
-                  {firstName} {lastName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor={fields.dateRangesFilter.id}>Date Ranges: </label>
-            <select
-              {...getSelectProps(fields.dateRangesFilter)}
+              >
+                <option value=''>All</option>
+                {workersFilter.map(({ username, firstName, lastName }) => (
+                  <option key={username} value={username}>
+                    {firstName} {lastName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={fields.dateRangesFilter.id}>Date Ranges: </label>
+              <select
+                {...getSelectProps(fields.dateRangesFilter)}
                 className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
-            >
-              <option value=''>All Time</option>
-              {dateRangesFilter.map(({ name, displayName }) => (
-                <option key={name} value={name}>
-                  {displayName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label htmlFor={fields.countFilter.id}>Count: </label>
-            <select
-              {...getSelectProps(fields.countFilter)}
+              >
+                <option value=''>All Time</option>
+                {dateRangesFilter.map(({ name, displayName }) => (
+                  <option key={name} value={name}>
+                    {displayName}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor={fields.countFilter.id}>Count: </label>
+              <select
+                {...getSelectProps(fields.countFilter)}
                 className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
-            >
-              <option value=''>All</option>
-              {countFilter.map(count => (
-                <option key={count} value={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
+              >
+                <option value=''>All</option>
+                {countFilter.map(count => (
+                  <option key={count} value={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <button
