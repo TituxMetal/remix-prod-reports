@@ -246,9 +246,9 @@ const ReportsListRoute = () => {
           </div>
         </Link>
       </div>
-      <div className='w-full rounded-md bg-sky-800 p-8'>
+      <div className='w-full rounded-md bg-sky-800 px-4 py-6'>
         <Form
-          className='flex gap-4'
+          className='flex flex-col gap-4'
           {...getFormProps(form)}
           method='get'
           action='/dashboard/reports'
@@ -256,11 +256,12 @@ const ReportsListRoute = () => {
           onReset={() => resetHandler()}
         >
           <input {...getInputProps(fields.page, { type: 'hidden' })} />
+          <div className='flex flex-wrap justify-center gap-4'>
           <div>
             <label htmlFor={fields.statusFilter.id}>Status: </label>
             <select
               {...getSelectProps(fields.statusFilter)}
-              className='rounded-md border border-orange-300 bg-transparent text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
+                className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             >
               <option value=''>All</option>
               {statusFilter.map(({ name, displayName }) => (
@@ -274,7 +275,7 @@ const ReportsListRoute = () => {
             <label htmlFor={fields.workstationsFilter.id}>Workstations: </label>
             <select
               {...getSelectProps(fields.workstationsFilter)}
-              className='rounded-md border border-orange-300 bg-transparent text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
+                className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             >
               <option value=''>All</option>
               {workstationsFilter.map(({ name, displayName }) => (
@@ -288,7 +289,7 @@ const ReportsListRoute = () => {
             <label htmlFor={fields.workersFilter.id}>Workers: </label>
             <select
               {...getSelectProps(fields.workersFilter)}
-              className='rounded-md border border-orange-300 bg-transparent text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
+                className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             >
               <option value=''>All</option>
               {workersFilter.map(({ username, firstName, lastName }) => (
@@ -302,7 +303,7 @@ const ReportsListRoute = () => {
             <label htmlFor={fields.dateRangesFilter.id}>Date Ranges: </label>
             <select
               {...getSelectProps(fields.dateRangesFilter)}
-              className='rounded-md border border-orange-300 bg-transparent text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
+                className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             >
               <option value=''>All Time</option>
               {dateRangesFilter.map(({ name, displayName }) => (
@@ -316,7 +317,7 @@ const ReportsListRoute = () => {
             <label htmlFor={fields.countFilter.id}>Count: </label>
             <select
               {...getSelectProps(fields.countFilter)}
-              className='rounded-md border border-orange-300 bg-transparent text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
+                className='rounded-md border border-orange-300 bg-sky-900 text-gray-200 focus:border-orange-300 focus:outline-none focus:ring-1 focus:ring-orange-600 focus:ring-offset-gray-900'
             >
               <option value=''>All</option>
               {countFilter.map(count => (
@@ -325,16 +326,17 @@ const ReportsListRoute = () => {
                 </option>
               ))}
             </select>
+            </div>
           </div>
           <button
             type='reset'
-            className='rounded-md bg-gray-800 px-4 font-bold text-gray-100 hover:bg-gray-900 hover:text-gray-100'
+            className='m-auto justify-center rounded-md bg-gray-800 px-6 py-2 font-bold text-gray-100 hover:bg-gray-900 hover:text-gray-100'
           >
             Reset
           </button>
         </Form>
       </div>
-      <div className='mb-4 mt-2 flex py-2'>
+      <div className='mt-6 flex py-2'>
         {paginator.currentPage > 1 && (
           <Link
             to={{
