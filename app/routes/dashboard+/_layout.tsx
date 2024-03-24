@@ -43,6 +43,14 @@ const DashboardLayout = () => {
               <li className='mx-1'>
                 <Link
                   className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
+                  to='reports'
+                >
+                  Reports
+                </Link>
+              </li>
+              <li className='mx-1'>
+                <Link
+                  className='inline-block rounded-b-md border-x-2 border-b-2 border-sky-700 bg-orange-800 px-3 py-1.5 font-semibold text-orange-200 hover:bg-orange-900 hover:text-orange-100'
                   to='workers'
                 >
                   Workers
