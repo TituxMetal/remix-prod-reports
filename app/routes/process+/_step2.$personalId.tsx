@@ -11,13 +11,8 @@ import { z } from 'zod'
 
 import { STEP_THREE_INTENT, STEP_TWO_INTENT, WORKER_ROLE } from '~/constants'
 import { prisma } from '~/libs'
-import {
-  authSessionStorage,
-  getAuthSessionInfo,
-  getSessionExpirationDate,
-  isStaffUser,
-  validateUserInSession
-} from '~/utils'
+import { getAuthSessionInfo, isStaffUser, validateUserInSession } from '~/utils/auth.server'
+import { authSessionStorage, getSessionExpirationDate } from '~/utils/session.server'
 
 const workstationIdSchema = z.object({
   workstationId: z.string({ required_error: 'Workstation Id is required' })

@@ -14,13 +14,12 @@ import { z } from 'zod'
 import { STEP_FOUR_INTENT, STEP_THREE_INTENT, WORKER_ROLE } from '~/constants'
 import { prisma } from '~/libs'
 import {
-  authSessionStorage,
   getAuthSessionInfo,
-  getSessionExpirationDate,
   getUserIdByPersonalId,
   isStaffUser,
   validateUserInSession
-} from '~/utils'
+} from '~/utils/auth.server'
+import { authSessionStorage, getSessionExpirationDate } from '~/utils/session.server'
 
 const createReportSchema = z.object({
   dateOfDay: z.string({ required_error: 'Date of day is required' }),

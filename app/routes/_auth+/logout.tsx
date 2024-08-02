@@ -1,6 +1,6 @@
 import { redirect, type ActionFunctionArgs } from '@remix-run/node'
 
-import { logout } from '~/utils'
+import { logout } from '~/utils/auth.server'
 
 export const loader = () => {
   return redirect('/')
