@@ -10,14 +10,8 @@ import { Form, useActionData } from '@remix-run/react'
 import { z } from 'zod'
 
 import { WORKER_ROLE } from '~/constants'
-import {
-  authSessionStorage,
-  getAuthSessionInfo,
-  getSessionExpirationDate,
-  isStaffUser,
-  login,
-  validateUserInSession
-} from '~/utils'
+import { getAuthSessionInfo, isStaffUser, login, validateUserInSession } from '~/utils/auth.server'
+import { authSessionStorage, getSessionExpirationDate } from '~/utils/session.server'
 
 const loginSchema = z.object({
   identifier: z

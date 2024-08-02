@@ -1,4 +1,3 @@
-import { cssBundleHref } from '@remix-run/css-bundle'
 import {
   json,
   type LinksFunction,
@@ -9,7 +8,6 @@ import {
   Form,
   Link,
   Links,
-  LiveReload,
   Meta,
   NavLink,
   Outlet,
@@ -17,18 +15,18 @@ import {
   ScrollRestoration
 } from '@remix-run/react'
 
-import faviconAssetUrl from '~/assets/favicon.svg'
-import tailwindStylesheetLink from '~/styles/tailwind.css'
+import faviconAssetUrl from '~/assets/favicon.svg?url'
+import tailwindStylesheetLink from '~/styles/tailwind.css?url'
 
-import { StaffRoles, WORKER_ROLE } from './constants'
-import { prisma } from './libs'
-import { authSessionStorage, useOptionalUser } from './utils'
+import { StaffRoles, WORKER_ROLE } from '~/constants'
+import { prisma } from '~/libs'
+import { authSessionStorage } from '~/utils/session.server'
+import { useOptionalUser } from '~/utils/user'
 
 export const links: LinksFunction = () => {
   return [
     { rel: 'icon', type: 'image/svg+xml', href: faviconAssetUrl },
-    { rel: 'stylesheet', href: tailwindStylesheetLink },
-    ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : [])
+    { rel: 'stylesheet', href: tailwindStylesheetLink }
   ]
 }
 
@@ -66,7 +64,6 @@ const Document = ({ children }: { children: React.ReactNode }) => {
         {children}
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )

@@ -1,7 +1,8 @@
 import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link, Outlet, useLocation } from '@remix-run/react'
 
-import { requireStaffUser, useUser } from '~/utils'
+import { requireStaffUser } from '~/utils/auth.server'
+import { useUser } from '~/utils/user'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireStaffUser(request)

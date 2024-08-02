@@ -5,7 +5,8 @@ import { useEffect } from 'react'
 
 import { STEP_FOUR_INTENT, WORKER_ROLE } from '~/constants'
 import { prisma } from '~/libs'
-import { authSessionStorage, getAuthSessionInfo, isStaffUser, validateUserInSession } from '~/utils'
+import { getAuthSessionInfo, isStaffUser, validateUserInSession } from '~/utils/auth.server'
+import { authSessionStorage } from '~/utils/session.server'
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const authSession = await authSessionStorage.getSession(request.headers.get('Cookie'))

@@ -1,10 +1,8 @@
 import { createCookieSessionStorage } from '@remix-run/node'
 
-import {
-  AUTH_SESSION_SECRET,
-  SESSION_EXPIRATION_TIME,
-  SHORT_SESSION_EXPIRATION_TIME
-} from '~/constants'
+import { SESSION_EXPIRATION_TIME, SHORT_SESSION_EXPIRATION_TIME } from '~/constants'
+
+const AUTH_SESSION_SECRET = process.env.AUTH_SESSION_SECRET || ''
 
 /**
  * Creates a cookie session storage for authentication.

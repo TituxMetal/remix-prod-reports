@@ -38,7 +38,7 @@ import { z } from 'zod'
 
 import { WORKER_ROLE } from '~/constants'
 import { prisma } from '~/libs'
-import { groupReportsByDay, sortReportsByDay } from '~/utils'
+import { groupReportsByDay, sortReportsByDay } from '~/utils/report.server'
 
 const filterReportsSchema = z.object({
   countFilter: z.string(),
@@ -300,10 +300,10 @@ const ReportsListRoute = () => {
       <div className='relative -top-10 flex justify-end'>
         <Link
           to='new'
-          className='flex items-center justify-center rounded-md bg-orange-500 p-2 hover:bg-orange-600 '
+          className='flex items-center justify-center rounded-md bg-orange-500 p-2 hover:bg-orange-600'
         >
           <div className='flex items-center justify-center rounded-full bg-gray-700 p-1 text-orange-300 hover:bg-gray-800 hover:text-orange-400'>
-            <PlusIcon className='size-10 ' />
+            <PlusIcon className='size-10' />
           </div>
         </Link>
       </div>
@@ -456,7 +456,7 @@ const ReportsListRoute = () => {
                           {' to '}
                           <time dateTime={report.endTime}>{report.endTime}</time>
                         </p>
-                        <p className='rounded-lg border border-yellow-300/60 bg-yellow-900 px-2 py-1 text-xs leading-5 text-yellow-200 '>
+                        <p className='rounded-lg border border-yellow-300/60 bg-yellow-900 px-2 py-1 text-xs leading-5 text-yellow-200'>
                           {report.statusName}
                         </p>
                         <div className='py-0.5 text-sm leading-5'>

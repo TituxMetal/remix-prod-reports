@@ -2,7 +2,8 @@ import { json, redirect, type LoaderFunctionArgs } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 
 import { STEP_ONE_INTENT } from '~/constants'
-import { authSessionStorage, getSessionExpirationDate, isStaffUser } from '~/utils'
+import { isStaffUser } from '~/utils/auth.server'
+import { authSessionStorage, getSessionExpirationDate } from '~/utils/session.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const authSession = await authSessionStorage.getSession(request.headers.get('Cookie'))
